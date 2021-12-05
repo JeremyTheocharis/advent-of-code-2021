@@ -9,6 +9,7 @@ fn main() {
     // Initialize the submarine to the origin.
     let mut horizontal = 0;
     let mut depth = 0;
+    let mut aim = 0;
     let mut command_vector: Vec<String> = Vec::new();
 
     // Read the file containing the commands.
@@ -36,9 +37,12 @@ fn main() {
 
         // Switch statement to execute the command.
         match command {
-            "forward" => horizontal += value,
-            "down" => depth += value,
-            "up" => depth -= value,
+            "forward" => {
+                horizontal += value;
+                depth += value * aim;
+            },
+            "down" => aim += value,
+            "up" => aim -= value,
             _ => println!("Invalid command!"),
         }
     }
