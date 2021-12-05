@@ -4,36 +4,19 @@ use std::path::Path;
 
 
 fn main() {
+    // Create depth i32 vector
+    let mut depth: Vec<i32> = Vec::new();
 
-    // Define variable depth_increased
-    let mut depth_increased = 0;
-
-    // Define variable last_depth
-    let mut last_depth = -1;
-
-
-    // File hosts must exist in current path before this produces output
+    // Open file and store it into vector
     if let Ok(lines) = read_lines("./input.txt") {
-        // Consumes the iterator, returns an (Optional) String
         for line in lines {
-            if let Ok(depth) = line {
-                // println!("{}", depth);
-
-                // Set last_depth to the first value
-                if last_depth == -1 {
-                    last_depth = depth.parse::<i32>().unwrap();
-                } else {
-                    // If the current depth is greater than the last depth, increase the depth_increased
-                    if depth.parse::<i32>().unwrap() > last_depth {
-                        depth_increased += 1;
-                    }
-                    // Set last_depth to the current depth
-                    last_depth = depth.parse::<i32>().unwrap();
+            if let Ok(current_depth) = line {
+                    depth.push(current_depth.parse::<i32>().unwrap());
                 }
             }
         }
         
-    }
+    let depth_increased = depth_increased(depth);
     println!("{}", depth_increased);
 
 }
@@ -45,4 +28,22 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where P: AsRef<Path>, {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
+}
+
+// This function takes a depth vector and return the number of times the depth has increased
+fn depth_increased(depth: Vec<i32>) -> i32 {
+    let mut depth_increased = 0;
+    let mut last_depth = -1;
+
+    for depth in depth {
+        if last_depth == -1 {
+            last_depth = depth;
+        } else {
+            if depth > last_depth {
+                depth_increased += 1;
+            }
+            last_depth = depth;
+        }
+    }
+    return depth_increased;
 }
